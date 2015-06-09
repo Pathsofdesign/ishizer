@@ -12,9 +12,13 @@ class Ishizer extends React.Component {
         let string = this.refs.textarea.getDOMNode().value.trim()
 
         // Match is, iss, and ish
-        let re = /(is?s)(?:h)*/gi
+        let result = string.replace(/(is?s)(?:h)*/gi, 'ish')
+        
+        // Match ishe (fixes things like dishguish (disguise))
+        result = result.replace(/ishe/gi, 'ise');
 
-        let result = string.replace(re, 'ish').replace(/ishe/gi, 'ise');
+        // Match it's and it's
+        result = result.replace(/^(it)(?:')*s/gi, 'ish');
         
         if (result == "") result = "Result Here";
 
