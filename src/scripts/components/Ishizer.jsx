@@ -18,7 +18,7 @@ class Ishizer extends React.Component {
         result = result.replace(/ishe/gi, 'ise');
 
         // Match it's and it's
-        result = result.replace(/^(it)(?:')*s/gi, 'ish');
+        result = result.replace(/(^|\s)(it)(?:')*s/gi, ' ish');
         
         if (result == "") result = "Result Here";
 
