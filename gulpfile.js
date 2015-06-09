@@ -18,7 +18,7 @@ var clean = require('gulp-clean');
 gulp.task('browser-sync', ['build'], function() {
   browserSync({
     server: {
-       baseDir: "./"
+       baseDir: "./dist"
     }
   });
 });
@@ -27,7 +27,7 @@ gulp.task('bs-reload', function () {
   browserSync.reload();
 });
 
-
+// Styles
 gulp.task('styles', function(){
   gulp.src(['src/styles/**/*.scss'])
     .pipe(plumber({
@@ -73,7 +73,14 @@ gulp.task('browserify', ['lint'], function () {
     .pipe(browserSync.reload({stream:true}))
 });
 
-gulp.task('build', ['styles', 'browserify']);
+// Html
+gulp.task('html', function() {
+  return gulp.src('./index.html')
+      .pipe(gulp.dest('dist'))
+      .pipe(browserSync.reload({stream:true}));
+});
+
+gulp.task('build', ['styles', 'browserify', 'html']);
 
 // Deploy to GH pages
 gulp.task('temp', ['build'], function() {
@@ -83,12 +90,12 @@ gulp.task('temp', ['build'], function() {
 
 gulp.task('deploy', ['temp'], function() {
     return gulp.src('./build')
-        //.pipe(subtree())
+        .pipe(subtree())
         .pipe(clean());
 });
 
 gulp.task('default', ['browser-sync'], function(){
   gulp.watch("src/styles/**/*.scss", ['styles']);
   gulp.watch(["src/scripts/**/*.jsx", "src/scripts/**/*.js"], ['browserify']);
-  gulp.watch("*.html", ['bs-reload']);
+  gulp.watch("*.html", ['html']);
 });
